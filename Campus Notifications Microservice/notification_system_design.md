@@ -148,7 +148,7 @@ Potential issues:
 
 Consider:
 
-* 50,000 students
+* 100,000 students
 * Millions of notifications
 
 Every student may repeatedly access notifications throughout the day.
@@ -206,7 +206,7 @@ The system should support business queries such as:
 
 Each page refresh triggering database queries can overload the system.
 
-### Solution 1 – Redis Cache
+### Solution 1 – Caching
 
 Store frequently accessed notifications in Redis.
 
@@ -231,7 +231,7 @@ Advantages:
 * Lower memory usage
 * Reduced network traffic
 
-### Solution 3 – Read Replicas
+### Solution 3 – Reading Replicas and Writing Replicas
 
 Separate read and write operations.
 
@@ -275,11 +275,11 @@ creates several issues:
 * Difficult error recovery
 * Partial failures
 
-For example, notifying 50,000 students sequentially would take considerable time.
+For example, notifying 50,000 students sequentially would take more time.
 
 ## Recommended Architecture
 
-HR Portal
+Admin Portal
 
 ↓
 
@@ -368,17 +368,7 @@ Notification priority depends on:
 
 Priority Score should be calculated using:
 
-Score =
-
-(Type Weight × 0.5)
-
-*
-
-(Impact × 0.3)
-
-*
-
-(Recency × 0.2)
+Score =(Type Weight × 0.5)*(Impact × 0.3)*(Recency × 0.2)
 
 ### Efficient Top-10 Retrieval
 
@@ -444,7 +434,7 @@ SMS Service
 # Final Recommendations
 
 * PostgreSQL for persistent notification storage
-* Redis for caching frequently accessed notifications
+* Caching frequently accessed notifications
 * Kafka for asynchronous processing and integration with email services
 * WebSockets for real-time notification delivery
 * Composite indexing for efficient unread notification retrieval
