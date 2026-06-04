@@ -1,69 +1,90 @@
 # Notification System Design
 
-## Stage 1 – Notification System API Design
+# Stage 1 – Notification System API Design
 
-### Objective
+## Objectives
+Support:
+- Placement Notifications
+- Event Notifications
+- Result Notifications
+- Read/Unread Tracking
+- Real-time Delivery
 
-The notification system should support:
+## REST APIs
 
-* Placement Notifications
-* Event Notifications
-* Result Notifications
-* Read/Unread Tracking
-* Real-Time Delivery
+### Create Notification
+```http
+POST /api/v1/notifications
+```
 
-### API Design
+Request:
+```json
+{
+  "userId": 1042,
+  "type": "PLACEMENT",
+  "title": "Placement Drive",
+  "message": "TCS drive scheduled tomorrow",
+  "priority": "HIGH"
+}
+```
 
-#### Create Notification
+Response:
+```json
+{
+  "notificationId": "uuid",
+  "status": "CREATED"
+}
+```
 
-A secure API should allow authorized services such as HR, Placement Cell, or Examination Cell to create notifications for students.
+### Get Notifications
+```http
+GET /api/v1/notifications?userId=1042&page=0&size=20
+```
 
-Input information includes:
+### Get Unread Notifications
+```http
+GET /api/v1/notifications/unread?userId=1042
+```
 
-* User ID
-* Notification Type
-* Title
-* Message
-* Priority
+### Mark As Read
+```http
+PATCH /api/v1/notifications/{id}/read
+```
 
-Output:
+### Delete Notification
+```http
+DELETE /api/v1/notifications/{id}
+```
 
-* Notification ID
-* Creation Status
+## Headers
 
-#### Fetch Notifications
+```http
+Authorization: Bearer <token>
+Content-Type: application/json
+```
 
-Students should be able to retrieve their notifications with pagination support to avoid loading large datasets at once.
+## Notification Schema
 
-Features:
+```json
+{
+  "id": "uuid",
+  "userId": 1042,
+  "type": "PLACEMENT",
+  "title": "Placement Drive",
+  "message": "Drive starts tomorrow",
+  "priority": "HIGH",
+  "isRead": false,
+  "createdAt": "2026-06-01T10:00:00Z"
+}
+```
 
-* User-specific retrieval
-* Pagination
-* Sorting by latest notifications
+## Real-Time Notifications
 
-#### Fetch Unread Notifications
-
-Students should be able to retrieve only unread notifications for faster access to important updates.
-
-#### Mark Notification as Read
-
-A notification should be marked as read once the student views it.
-
-#### Delete Notification
-
-Users or administrators should be able to remove notifications when required.
-
-### Security
-
-All APIs should be protected using authentication and authorization mechanisms such as JWT tokens.
-
-### Real-Time Notifications
-
-Instead of requiring users to refresh the application repeatedly, the system should push notifications instantly using WebSockets or Server-Sent Events (SSE).
+Use WebSocket/SSE.
 
 Flow:
 
-Student Application → Notification Service → Real-Time Push → Student Device
+Client → WebSocket Connection → Notification Service → Push Event → Browser/App
 
 ---
 
