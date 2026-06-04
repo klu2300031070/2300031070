@@ -38,12 +38,12 @@ Response:
 
 ### Get Notifications
 ```http
-GET /api/v1/notifications?userId=1042&page=0&size=20
+GET /api/v1/notifications/{id}
 ```
 
 ### Get Unread Notifications
 ```http
-GET /api/v1/notifications/unread?userId=1042
+GET /api/v1/notifications/unread/{id}
 ```
 
 ### Mark As Read

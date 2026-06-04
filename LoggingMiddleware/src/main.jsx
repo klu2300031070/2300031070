@@ -8,6 +8,6 @@ import Vehicle_Scheduling from './Vehicle_Scheduling';
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <App />
-    <Vehicle_Scheduling/>
+    {/* <Vehicle_Scheduling/> */}
   </StrictMode>,
 )
